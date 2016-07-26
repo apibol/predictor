@@ -3,6 +3,7 @@ package predictor.domain.service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import domain.Participant;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +11,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import predictor.domain.Participant;
 import predictor.domain.exception.InvalidParticipant;
 
 import java.util.Objects;
@@ -30,7 +30,7 @@ public class ParticipantService {
     @Value("${services.user.info}")
     private String url;
 
-    private final Cache<String,Participant> cache = CacheBuilder.newBuilder().maximumSize(100).expireAfterWrite(24L, TimeUnit.HOURS).build();
+    private final Cache<String, Participant> cache = CacheBuilder.newBuilder().maximumSize(100).expireAfterWrite(24L, TimeUnit.HOURS).build();
 
     @HystrixCommand(fallbackMethod = "getParticipantInCache")
     public Participant getUserInfo(String participantId){

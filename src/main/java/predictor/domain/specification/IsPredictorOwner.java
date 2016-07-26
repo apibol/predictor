@@ -1,7 +1,6 @@
 package predictor.domain.specification;
 
 import domain.SystemUser;
-import predictor.domain.Participant;
 import predictor.domain.Predictor;
 import specification.AbstractSpecification;
 

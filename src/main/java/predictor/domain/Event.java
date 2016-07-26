@@ -1,5 +1,6 @@
 package predictor.domain;
 
+import domain.Participant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

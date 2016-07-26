@@ -1,5 +1,6 @@
 package predictor.domain.service;
 
+import domain.Participant;
 import domain.SystemUser;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import predictor.domain.Event;
 import predictor.domain.JoinPredictorRequest;
-import predictor.domain.Participant;
 import predictor.domain.Predictor;
 import predictor.domain.exception.*;
 import predictor.domain.repository.PredictorRepository;
