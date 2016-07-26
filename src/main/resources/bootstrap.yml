@@ -1,0 +1,21 @@
+---
+spring:
+  profiles: default
+  application:
+    name: predictors
+  cloud:
+    config:
+      uri: http://config:8001/
+
+# Set to server.port=0 (waiting for bugfix)
+server:
+  port: 7003
+
+---
+spring:
+  profiles: docker
+  application:
+    name: predictors
+  cloud:
+    config:
+      uri: http://config:8001/
