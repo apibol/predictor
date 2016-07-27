@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import predictor.domain.exception.InvalidHash;
+import predictor.domain.exception.ParticipantNotInPredictor;
 import predictor.domain.exception.ParticipantNotInvited;
 import predictor.domain.specification.IsParticipantInvited;
 import predictor.domain.specification.IsPrivatePredictor;
@@ -12,6 +13,7 @@ import predictor.domain.specification.IsValidJoinPredictionRequest;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -103,7 +105,8 @@ public class Predictor {
    * @param participant
    * @return
    */
-  public static Predictor createPredictor(String id, String eventId, Participant participant,Boolean open) {
+  public static Predictor createPredictor(String id, String eventId, Participant participant,
+      Boolean open) {
     return new Predictor(id, eventId, participant, open);
   }
 
@@ -148,9 +151,12 @@ public class Predictor {
    * @param participantId
    * @return
    */
-  public Participant participantInfo(String participantId) {
-    return this.participants.stream().filter(part -> part.getId().equals(participantId)).findFirst()
-        .get();
+  public Participant participantInfo(String participantId) throws ParticipantNotInPredictor {
+    final Optional<Participant> optional = this.participants.stream().filter(part -> part.getId().equals(participantId)).findFirst();
+    if (optional.isPresent()) {
+      return optional.get();
+    }
+    throw new ParticipantNotInPredictor(participantId, this.id);
   }
 
   /**
@@ -160,13 +166,7 @@ public class Predictor {
    * @return
    */
   private Predictor removeInvitation(String userId) {
-    Iterator<Invitation> iterator = this.invitations.iterator();
-    while (iterator.hasNext()) {
-      Invitation invitation = iterator.next();
-      if (invitation.getUserId().equals(userId)) {
-        iterator.remove();
-      }
-    }
+    this.invitations.removeIf(el -> el.getUserId().equals(userId));
     return this;
   }
 
